@@ -20,10 +20,12 @@ module Pickle
         end
       end    
       
-      def parse_hash(hash)
+     def parse_hash(hash)
         hash.inject({}) do |parsed, (key, val)|
           if session && val =~ /^#{capture_model}$/
             parsed.merge(key => session.model($1))
+          elsif val.is_a? String
+            parsed.merge(key => eval(val))
           else
             parsed.merge(key => val)
           end
